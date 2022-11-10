@@ -37,3 +37,27 @@ void density(PGraphics g, double x, double y, double w, double h, double space, 
       g.line(xy[0], delta, xy[0] + wh[0], delta);
   }
 }
+
+void zigzag(PGraphics g, double x, double y, double w, double h, double space, float mult) {
+  float[] xy = paperToWorldPx(x, y);
+  float[] wh = mmToScaledPx(w, h);
+  float space_ = mmToScaledPx(space);
+  g.beginShape();
+  float delta = xy[1];
+  float pDelta;
+  g.vertex(xy[0], delta);
+  for (int cnt = 1; delta <= xy[1] + wh[1]; cnt ++) {
+    pDelta = delta;
+    delta += space_;
+    if (cnt % 2 == 0) {
+      g.bezierVertex(xy[0] + wh[0], pDelta - mult * space_,
+        xy[0], delta + mult * space_,
+        xy[0], delta);
+    } else {
+      g.bezierVertex(xy[0], pDelta - mult * space_,
+        xy[0] + wh[0], delta + mult * space_,
+        xy[0] + wh[0], delta);
+    }
+  }
+  g.endShape();
+}
